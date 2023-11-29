@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+      {% load static %}
+      {% load custom_filter %}
+      <script src="{% static 'stripe.js' %}"></script>
+      <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+      <!--<link rel="stylesheet" type="text/css" href="http://172.25.0.4/static/style.css">-->
+  </head>
+  <body>
+    <div class="item">
+      <div class="itemAtr">
+        id: {{ item.id }}
+      </div>
+      <div class="itemAtr">
+        title: {{ item.name }}
+      </div>
+      <div class="itemAtr">
+        price: {{ item.price|c2doll }}$
+      </div>
+      <div class="itemAtr">
+        description: {{ item.description }}
+      </div>
+      <button class="btn" onclick="session(`{{ item.id }}`)">Buy</button>
+    </div>
+      <!--<script src="http://172.25.0.4/static/script.js"></script>-->
+            <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>
