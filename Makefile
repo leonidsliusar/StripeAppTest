@@ -5,6 +5,8 @@ start:
 	docker compose up -d
 	@sleep 5
 	@echo Check App http://localhost:81
+	@echo ADMIN USERNAME: $(DJANGO_SUPERUSER_USERNAME)\nADMIN PASS: root
+
 
 stop:
 	docker compose down -v
@@ -21,6 +23,7 @@ dev:
         --username $(DJANGO_SUPERUSER_USERNAME) \
         --email $(DJANGO_SUPERUSER_EMAIL)
 	python manage.py runserver
+	@echo ADMIN USERNAME: $(DJANGO_SUPERUSER_USERNAME)\nADMIN PASS: root
 
 stopDev:
 	lsof -t -i tcp:8000 | xargs kill -9

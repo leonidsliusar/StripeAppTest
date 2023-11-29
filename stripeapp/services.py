@@ -23,9 +23,9 @@ class BuyServices:
     def __init__(self, payment_system: PaymentManager = StripeManager()):
         self.payment_manager = payment_system
 
-    def get_session(self, item_id: int) -> dict:
+    def get_session(self, item_id: int) -> str:
         item_obj_map = ItemService.retrieve_item(item_id)
-        return {"session": self.payment_manager.get_session(item=item_obj_map)}
+        return self.payment_manager.get_session(item=item_obj_map)
 
 
 buy_services = BuyServices()
