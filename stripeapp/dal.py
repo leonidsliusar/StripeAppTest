@@ -23,15 +23,21 @@ def get_item(item_id: int) -> Item:
 
 
 def get_order(order_id: Union[int, str]) -> Optional[Order]:
-    return Order.objects.prefetch_related(
-        'items').select_related(
-        'discount').select_related(
-        'tax').filter(pk=order_id).first()
+    return (
+        Order.objects.prefetch_related("items")
+        .select_related("discount")
+        .select_related("tax")
+        .filter(pk=order_id)
+        .first()
+    )
 
 
 def get_orders_by_item(item_id: Union[int, str]) -> list[Order]:
-    response = Order.objects.filter(items__pk=item_id).select_related(
-        'discount').select_related(
-        'tax').prefetch_related(
-        'items').all()
+    response = (
+        Order.objects.filter(items__pk=item_id)
+        .select_related("discount")
+        .select_related("tax")
+        .prefetch_related("items")
+        .all()
+    )
     return list(response)

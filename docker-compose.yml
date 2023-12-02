@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+    container_name: stripeApp
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True
+      - DJANGO_SUPERUSER_USERNAME=root
+      - DJANGO_SUPERUSER_EMAIL=example@example.com
+      - DB_HOST=172.22.0.3
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_NAME=db_app
+      - SECRET_KEY=django-insecure--r2res1y17r6w))0s+_dojngz%2d1@@p@1_l3#8ix2lj5ni)fq
+      - ALLOWED_HOSTS=172.22.0.2,0.0.0.0
+      - STRIPE_PUB_KEY=pk_test_51Mo3QcCf3ABPW4Y39UtVE2GfamiOpZOE9oEs5Qtk0tPG3hrbosYV68EP8xpAgGnSvUIuAbQmwC2HMntYScmC2ETM00Wtx0pRm7
+      - STRIPE_SEC_KEY=sk_test_51Mo3QcCf3ABPW4Y3tW2rIhV11CP6mSi4THoNBhU9n5yRRbILmEBqcv2M3qCkNMgJiIfLJVCFaMmIJcEtz0Qkhfqj00m5jux9Ci
+      - SUCCESS_URL=https://google.com
+      - RETURN_URL=https://google.com
+    networks:
+      app_network:
+        ipv4_address: 172.22.0.2
+
+  db:
+    image: postgres:15.0-alpine
+    restart: always
+    container_name: postgresSD
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'db_app'
+    networks:
+      app_network:
+        ipv4_address: 172.22.0.3
+
+  web-server:
+    image: nginx
+    container_name: server
+    ports:
+      - '81:80'
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./stripeapp/static:/usr/share/nginx/static
+    networks:
+      app_network:
+        ipv4_address: 172.22.0.4
+
+networks:
+  app_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16

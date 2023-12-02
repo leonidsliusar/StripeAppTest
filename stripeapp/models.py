@@ -56,9 +56,15 @@ class Discount(models.Model):
     percent_off = models.FloatField(validators=from_0_to_100, editable=False)
     duration_in_months = models.IntegerField(blank=True, null=True, editable=False)
     name = models.CharField(blank=True, null=True)
-    max_redemptions = models.IntegerField(blank=True, null=True, help_text=redeem_help, editable=False)
+    max_redemptions = models.IntegerField(
+        blank=True, null=True, help_text=redeem_help, editable=False
+    )
     redeem_by = models.DateTimeField(
-        blank=True, null=True, help_text=redeem_help, validators=not_more_than_5y, editable=False
+        blank=True,
+        null=True,
+        help_text=redeem_help,
+        validators=not_more_than_5y,
+        editable=False,
     )
     metadata = models.JSONField(blank=True, null=True, help_text=metadata_help)
 

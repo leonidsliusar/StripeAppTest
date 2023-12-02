@@ -1,7 +1,7 @@
 import pytest
 from stripeapp.dal import add_item, get_item, get_order, get_orders_by_item
 from stripeapp.datamodels import OrderDTO
-from stripeapp.tests.conftest import get_item_from_db
+from .conftest import get_item_from_db
 
 
 @pytest.mark.django_db
@@ -26,7 +26,9 @@ def test_get_item(add_stub_item, get_stub_item_obj, item_id):
 @pytest.mark.django_db
 def test_get_order(stub_order, stub_order_map):
     expected_map = OrderDTO(**stub_order_map)
-    obj_map = OrderDTO.serialize_django_model(get_order(stub_order.pk)).model_dump(exclude_none=True)
+    obj_map = OrderDTO.serialize_django_model(get_order(stub_order.pk)).model_dump(
+        exclude_none=True
+    )
     assert obj_map == expected_map.model_dump(exclude_none=True)
 
 

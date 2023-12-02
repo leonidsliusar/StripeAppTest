@@ -1,0 +1,11 @@
+dockerLocal
+*.yml
+README.MD
+Makefile
+stripeapp/tests
+.env
+.idea
+.pytest_cache
+.gitignore
+nginx.conf
+*.png

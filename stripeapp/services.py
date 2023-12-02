@@ -23,7 +23,9 @@ class OrderService:
     @staticmethod
     def retrieve_order(order_id: Union[str, int]) -> dict:
         order_from_db = get_order(order_id)
-        order = OrderDTO.serialize_django_model(order_from_db).model_dump(exclude_none=True)
+        order = OrderDTO.serialize_django_model(order_from_db).model_dump(
+            exclude_none=True
+        )
         return order
 
     @staticmethod

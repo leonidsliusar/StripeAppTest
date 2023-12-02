@@ -8,4 +8,4 @@ admin.site.register(Discount)
 
 @admin.register(Tax)
 class TaxAdmin(admin.ModelAdmin):
-    exclude = ('id', 'pk', 'ID')
+    exclude = ("id", "pk", "ID")

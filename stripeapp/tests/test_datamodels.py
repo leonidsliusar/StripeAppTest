@@ -21,8 +21,8 @@ def test_DiscountDTO(mock_data):
 @pytest.mark.parametrize("mock_data", (Tax,), indirect=True)
 def test_TaxDTO(mock_data):
     obj_dto = TaxDTO.model_validate(mock_data).model_dump(exclude_none=True)
-    mock_data['active'] = True
-    mock_data['id'] = str(mock_data['id'])
+    mock_data["active"] = True
+    mock_data["id"] = str(mock_data["id"])
     assert obj_dto == mock_data
 
 

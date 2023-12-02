@@ -86,13 +86,20 @@ class StripeManager(PaymentManager):
 
 class StripeManagerExtend(StripeManager, ExtendedTax, ExtendedDiscount):
     @override
-    def get_session(
-        self, item: dict, coupon_id: str, tax_id: str, *args, **kwargs
-    ) -> str:
+    def get_session(self, order: dict, *args, **kwargs) -> str:
         checkout_session = stripe.checkout.Session.create(
             success_url=self._success_url if self._success_url else None,
             cancel_url=self._return_url if self._success_url else None,
-            line_items=[
+            line_items=self._get_line_items(order),
+            mode="payment",
+            discounts=[{"coupon": order.get("discount").get("id")}],
+        )
+        return checkout_session.id
+
+    def _get_line_items(self, order: dict) -> list:
+        line_items = []
+        for item in order.get("items"):
+            line_items.append(
                 {
                     "price_data": {
                         "currency": "usd",
@@ -100,13 +107,10 @@ class StripeManagerExtend(StripeManager, ExtendedTax, ExtendedDiscount):
                         "unit_amount": item.get("price"),
                     },
                     "quantity": 1,
-                },
-            ],
-            mode="payment",
-            discounts=[{"coupon": coupon_id}],
-            taxes=[{"t": tax_id}],
-        )
-        return checkout_session.id
+                    "tax_rates": [order.get("tax").get("id")],
+                }
+            )
+        return line_items
 
     def retrieve_coupon(self, instance_id: Union[str, int], *args, **kwargs) -> dict:
         try:
@@ -123,7 +127,8 @@ class StripeManagerExtend(StripeManager, ExtendedTax, ExtendedDiscount):
             dto_discount = DiscountDTO.model_validate(instance.__dict__).model_dump(
                 exclude_none=True
             )
-            return self._stripe.Coupon.create(**dto_discount)
+            coupon = self._stripe.Coupon.create(**dto_discount)
+            return coupon
         except Exception as e:
             raise PaymentSystemException(str(e))
 
@@ -150,15 +155,14 @@ class StripeManagerExtend(StripeManager, ExtendedTax, ExtendedDiscount):
     def retrieve_tax(self, instance_id: Union[str, int], *args, **kwargs) -> dict:
         try:
             tax = self._stripe.TaxRate.retrieve(str(instance_id))
-            tax_dto = TaxDTO.model_validate(tax).model_dump(exclude_none=True)
-            return tax_dto
+            return TaxDTO.model_validate(tax).model_dump(exclude_none=True)
         except Exception as e:
             raise PaymentSystemException(str(e))
 
     def new_tax(self, instance: Tax, *args, **kwargs) -> dict:
         try:
             dto_tax = TaxDTO.model_validate(instance.__dict__).model_dump(
-                exclude_none=True, exclude={'id', 'pk'}
+                exclude_none=True, exclude={"id", "pk"}
             )
             return self._stripe.TaxRate.create(**dto_tax)
         except Exception as e:

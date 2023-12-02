@@ -1,8 +1,9 @@
 import datetime
 from decimal import Decimal
-from typing import Optional, Any, TypeVar, Union
-from pydantic import BaseModel, field_validator, Field, model_validator
-from stripeapp.models import Discount, Item, Tax, Order
+from enum import Enum
+from typing import Optional, TypeVar, Union
+from pydantic import BaseModel, field_validator, Field
+from .models import Order
 
 
 class ItemDTO(BaseModel):
@@ -29,7 +30,9 @@ class DiscountDTO(BaseModel):
 
     @field_validator("redeem_by", mode="after")
     def check_data(cls, value) -> datetime.datetime:
-        if value and value < datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=5 * 365):
+        if value and value < datetime.datetime.now(
+            datetime.timezone.utc
+        ) + datetime.timedelta(days=5 * 365):
             return value
 
     @field_validator("metadata", mode="after")
@@ -49,7 +52,7 @@ class DiscountDTOUpdate(BaseModel):
 
 
 class TaxBase(BaseModel):
-    id: Optional[str] = Field(alias='pk', default=None)
+    id: Optional[str] = Field(alias="pk", default=None)
     active: bool = True
     country: Optional[str] = None
     description: Optional[str] = None
@@ -70,7 +73,6 @@ class TaxBase(BaseModel):
 
 
 class TaxDTO(TaxBase):
-
     id: Optional[str] = None
     display_name: str
     percentage: Decimal = Field(ge=0, le=100, decimal_places=3)
@@ -80,7 +82,7 @@ class TaxDTO(TaxBase):
     def serialize_decimal(cls, data: Decimal) -> Decimal:
         if data:
             data = Decimal(data)
-            data = data.quantize(Decimal('.001'))
+            data = data.quantize(Decimal(".001"))
             return data
 
 
@@ -88,7 +90,7 @@ class TaxDTOUpdate(TaxBase):
     ...
 
 
-TOrderDTO = TypeVar('TOrderDTO', bound='OrderDTO')
+TOrderDTO = TypeVar("TOrderDTO", bound="OrderDTO")
 
 
 class OrderDTO(BaseModel):
@@ -98,7 +100,9 @@ class OrderDTO(BaseModel):
     tax: Optional[TaxDTO]
 
     @classmethod
-    def serialize_django_model(cls, data: Union[Order, list[Order]]) -> Union[TOrderDTO, list[TOrderDTO]]:
+    def serialize_django_model(
+        cls, data: Union[Order, list[Order]]
+    ) -> Union[TOrderDTO, list[TOrderDTO]]:
         if isinstance(data, list):
             serialized_data = [cls.serialize_django_model(order) for order in data]
             return serialized_data
@@ -107,6 +111,6 @@ class OrderDTO(BaseModel):
                 "id": data.pk,
                 "items": [item.__dict__ for item in data.items.all()],
                 "discount": data.discount.__dict__ if data.discount else None,
-                "tax": data.tax.__dict__ if data.tax else None
+                "tax": data.tax.__dict__ if data.tax else None,
             }
             return OrderDTO(**order_map)

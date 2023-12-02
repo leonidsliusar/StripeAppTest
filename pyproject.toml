@@ -14,6 +14,7 @@ stripe = "^7.6.0"
 pydantic = "^2.5.2"
 overrides = "^7.4.0"
 djantic = "^0.7.0"
+gunicorn = "^21.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,11 +23,16 @@ pytest-django = "^4.7.0"
 black = "^23.11.0"
 flake8 = "^6.1.0"
 pytest-mock = "^3.12.0"
+pytest-env = "^1.1.3"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = 'stripeapp.tests.settings'
+
+
+[tool.pytest_env]
+TEST_MODE = "True"
+DJANGO_SETTINGS_MODULE = "app.settings"

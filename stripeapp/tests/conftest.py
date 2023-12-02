@@ -1,8 +1,6 @@
 import os
 import time
 from datetime import datetime, timezone
-from decimal import Decimal
-
 import pytest
 from stripeapp.models import Item, Discount, Order, Tax
 
@@ -40,11 +38,11 @@ def mock_data(request) -> dict:
 
 @pytest.fixture(scope="session")
 def django_db_setup():
-    os.system("docker compose -f stripeapp/tests/docker-compose.yml up -d")
+    os.system("docker compose -f stripeapp/tests/docker-compose-test.yml up -d")
     time.sleep(2)
     os.system("python manage.py migrate")
     yield
-    os.system("docker compose -f stripeapp/tests/docker-compose.yml down -v")
+    os.system("docker compose -f stripeapp/tests/docker-compose-test.yml down -v")
 
 
 def get_item_from_db(obj_id: int) -> Item:
@@ -83,7 +81,9 @@ def stub_discount_map() -> dict:
         "currency": "eur",
         "percent_off": 50.5,
         "max_redemptions": 2,
-        "redeem_by": datetime(year=2050, month=1, day=1, hour=0, minute=0, second=0, tzinfo=timezone.utc),
+        "redeem_by": datetime(
+            year=2050, month=1, day=1, hour=0, minute=0, second=0, tzinfo=timezone.utc
+        ),
         "metadata": {"1": "1"},
     }
 
@@ -104,11 +104,11 @@ def stub_order_map() -> dict:
         "id": 1,
         "items": [stub_item_map(1)],
         "discount": stub_discount_map(),
-        "tax": stub_tax_map()
+        "tax": stub_tax_map(),
     }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def stub_order(mocker) -> Order:
     mock_inst = mocker.Mock()
     mock_inst.new_coupon.return_value = {"id": 1}
