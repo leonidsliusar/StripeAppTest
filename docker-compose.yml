@@ -22,8 +22,8 @@ services:
       - DB_NAME=db_app
       - SECRET_KEY=r2fsdfdsf333f3@fsf)res1y17r6w))0s+_dojngz%2d1@@p@1_l3#8ix2lj5ni)fq
       - ALLOWED_HOSTS=localhost,localhost:81
-      - STRIPE_PUB_KEY=pk_test_51Mo3QcCf3ABPW4Y39UtVE2GfamiOpZOE9oEs5Qtk0tPG3hrbosYV68EP8xpAgGnSvUIuAbQmwC2HMntYScmC2ETM00Wtx0pRm7
-      - STRIPE_SEC_KEY=sk_test_51Mo3QcCf3ABPW4Y3tW2rIhV11CP6mSi4THoNBhU9n5yRRbILmEBqcv2M3qCkNMgJiIfLJVCFaMmIJcEtz0Qkhfqj00m5jux9Ci
+      - STRIPE_PUB_KEY=
+      - STRIPE_SEC_KEY=
       - SUCCESS_URL=https://localhost
       - RETURN_URL=https://localhost
       - ENV APP_HOME=/home/src/web
