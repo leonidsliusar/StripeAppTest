@@ -2,11 +2,9 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8">
-      {% load static %}
       {% load custom_filter %}
     <script src="https://js.stripe.com/v3/" crossorigin="anonymous"></script>
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">-->
-    <link rel="stylesheet" type="text/css" href="http://172.22.0.4/static/style.css">
+    <link rel="stylesheet" type="text/css" href="../../staticfiles/style.css">
   </head>
   <body>
     <div class="item">
@@ -24,7 +22,6 @@
       </div>
       <button class="btn" onclick="session(`{{ item.id }}`)">Buy</button>
     </div>
-    <script src="http://172.22.0.4/static/script.js"></script>
-            <!--<script src="{% static 'script.js' %}"></script>-->
+    <script src="../../staticfiles/script.js"></script>
   </body>
 </html>

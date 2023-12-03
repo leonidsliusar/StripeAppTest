@@ -40,4 +40,9 @@ class OrdersByItemView(View):
 
     def get(self, request, *args, **kwargs):
         order = OrderService.retrieve_orders_by_item(item_id=kwargs.get("id"))
-        return JsonResponse(order)
+        return JsonResponse({"orders": order})
+
+
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "home.html")

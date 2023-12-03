@@ -16,5 +16,6 @@ RUN poetry update
 COPY . /src
 
 CMD python manage.py migrate && \
-    python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL && \
-    gunicorn app.wsgi:application -c gunicorn_config.py
+	chmod +x config/create_admin.sh && \
+	./config/create_admin.sh && \
+    gunicorn app.wsgi:application -c config/gunicorn_config.py

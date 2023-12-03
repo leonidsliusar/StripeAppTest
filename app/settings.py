@@ -16,10 +16,11 @@ from dotenv import load_dotenv
 load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG")
+DEBUG = False
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+CSRF_TRUSTED_ORIGINS = ['http://'+host for host in ALLOWED_HOSTS]
 
 
 INSTALLED_APPS = [
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "stripeapp.apps.StripeAppConfig",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -62,7 +64,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "app.wsgi.application"
 
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -75,7 +76,6 @@ DATABASES = {
         else str(os.getenv("DB_PORT")),
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -100,9 +100,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+STATIC_URL = "/staticfiles/"
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "./stripeapp/static")]
-
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

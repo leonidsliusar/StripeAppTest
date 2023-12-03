@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Стратовая страница</title>
+    <link rel="stylesheet" type="text/css" href="../../staticfiles/home.css">
+</head>
+<body>
+    <h1>Тестовое задание StripeAPI</h1>
+    <div class="main">
+        <div class="ctrlBtn">
+            <button class="btn" id="admin" onclick="redirect('admin')">Перейти в Админ-панель</button>
+        </div>
+        <div class="desc">
+            <h2>
+                Доступные API
+            </h2>
+            <div class="description">
+                <div>GET item/int:id</div>
+                <div>Переход на страницу с Item по его id</div>
+            </div>
+            <div class="description">
+                <div>GET buy/int:id</div>
+                <div>
+                    <div>Генерирует ссылку на оплату</div>
+                    <div>Возвращает seesion_id и публичный ключ от Stripe API</div>
+                </div>
+            </div>
+            <div class="description">
+                <div>GET order/int:id</div>
+                <div>Возвращает JSON Order по его id</div>
+            </div>
+            <div class="description">
+                <div>GET order/by_item/int:id</div>
+                <div>Возвращает JSON с массивом Orders выбранных по id Item</div>
+            </div>
+        </div>
+    </div>
+    <script src="../../staticfiles/home.js"></script>
+</body>
+</html>

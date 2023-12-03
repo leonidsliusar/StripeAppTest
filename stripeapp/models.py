@@ -49,42 +49,26 @@ class Discount(models.Model):
         repeat = "repeating"
         forever = "forever"
 
-    currency = models.CharField(choices=Currency.choices, default="usd", editable=False)
-    duration = models.CharField(
-        choices=Duration.choices, default="once", blank=True, null=True, editable=False
-    )
-    percent_off = models.FloatField(validators=from_0_to_100, editable=False)
-    duration_in_months = models.IntegerField(blank=True, null=True, editable=False)
+    currency = models.CharField(choices=Currency.choices, default="usd")
+    duration = models.CharField(choices=Duration.choices, default="once", blank=True, null=True)
+    percent_off = models.FloatField(validators=from_0_to_100)
+    duration_in_months = models.IntegerField(blank=True, null=True)
     name = models.CharField(blank=True, null=True)
-    max_redemptions = models.IntegerField(
-        blank=True, null=True, help_text=redeem_help, editable=False
-    )
-    redeem_by = models.DateTimeField(
-        blank=True,
-        null=True,
-        help_text=redeem_help,
-        validators=not_more_than_5y,
-        editable=False,
-    )
+    max_redemptions = models.IntegerField(blank=True, null=True, help_text=redeem_help)
+    redeem_by = models.DateTimeField(blank=True, null=True, help_text=redeem_help, validators=not_more_than_5y)
     metadata = models.JSONField(blank=True, null=True, help_text=metadata_help)
 
 
 class Tax(models.Model):
     id = models.CharField(primary_key=True, auto_created=False, default=uuid.uuid4)
-    display_name = models.CharField(editable=False)
-    inclusive = models.BooleanField(default=False, editable=False)
-    percentage = models.DecimalField(
-        max_digits=10 * 10, decimal_places=3, validators=from_0_to_100, editable=False
-    )
+    display_name = models.CharField()
+    inclusive = models.BooleanField(default=False)
+    percentage = models.DecimalField(max_digits=10 * 10, decimal_places=3, validators=from_0_to_100)
     active = models.BooleanField(default=True)
     jurisdiction = models.CharField(blank=True, null=True, help_text=jurisdiction_help)
-    country = models.CharField(
-        blank=True, null=True, help_text=country_help, validators=two_symbol
-    )
+    country = models.CharField(blank=True, null=True, help_text=country_help, validators=two_symbol)
     description = models.CharField(blank=True, null=True)
-    state = models.CharField(
-        blank=True, null=True, help_text=state_help, validators=two_symbol
-    )
+    state = models.CharField(blank=True, null=True, help_text=state_help, validators=two_symbol)
     metadata = models.JSONField(blank=True, null=True, help_text=metadata_help)
 
 

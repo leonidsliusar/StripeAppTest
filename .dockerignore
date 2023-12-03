@@ -7,5 +7,5 @@ stripeapp/tests
 .idea
 .pytest_cache
 .gitignore
-nginx.conf
+config/nginx.conf
 *.png

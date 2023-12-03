@@ -67,8 +67,8 @@ class StripeManager(PaymentManager):
 
     def get_session(self, item: dict, *args, **kwargs) -> str:
         checkout_session = stripe.checkout.Session.create(
-            success_url=self._success_url if self._success_url else None,
-            cancel_url=self._return_url if self._success_url else None,
+            success_url=self._success_url+f'item/{item.get("id")}' if self._success_url else None,
+            cancel_url=self._return_url+f'item/{item.get("id")}' if self._success_url else None,
             line_items=[
                 {
                     "price_data": {
@@ -88,8 +88,8 @@ class StripeManagerExtend(StripeManager, ExtendedTax, ExtendedDiscount):
     @override
     def get_session(self, order: dict, *args, **kwargs) -> str:
         checkout_session = stripe.checkout.Session.create(
-            success_url=self._success_url if self._success_url else None,
-            cancel_url=self._return_url if self._success_url else None,
+            success_url=self._success_url+f'order/{order.get("id")}' if self._success_url else None,
+            cancel_url=self._return_url+f'order/{order.get("id")}' if self._success_url else None,
             line_items=self._get_line_items(order),
             mode="payment",
             discounts=[{"coupon": order.get("discount").get("id")}],
