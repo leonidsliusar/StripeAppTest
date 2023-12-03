@@ -24,8 +24,8 @@ services:
       - ALLOWED_HOSTS=localhost,localhost:81
       - STRIPE_PUB_KEY=
       - STRIPE_SEC_KEY=
-      - SUCCESS_URL=http://localhost
-      - RETURN_URL=http://localhost
+      - SUCCESS_URL=http://localhost/
+      - RETURN_URL=http://localhost/
       - ENV APP_HOME=/home/src/web
     networks:
       app_network:
