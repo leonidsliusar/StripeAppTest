@@ -14,6 +14,15 @@ load_dotenv()
 
 
 class PaymentManager(ABC):
+     _pub_key = os.getenv("STRIPE_PUB_KEY")
+    _sec_key = os.getenv("STRIPE_SEC_KEY")
+    _success_url = os.getenv("SUCCESS_URL")
+    _return_url = os.getenv("RETURN_URL")
+
+    def __init__(self):
+        stripe.api_key = self._sec_key
+        self._stripe = stripe
+        
     @abstractmethod
     def get_session(self, *args, **kwargs) -> str:
         ...
@@ -56,14 +65,6 @@ class ExtendedTax(ABC):
 
 
 class StripeManager(PaymentManager):
-    _pub_key = os.getenv("STRIPE_PUB_KEY")
-    _sec_key = os.getenv("STRIPE_SEC_KEY")
-    _success_url = os.getenv("SUCCESS_URL")
-    _return_url = os.getenv("RETURN_URL")
-
-    def __init__(self):
-        stripe.api_key = self._sec_key
-        self._stripe = stripe
 
     def get_session(self, item: dict, *args, **kwargs) -> str:
         checkout_session = stripe.checkout.Session.create(
